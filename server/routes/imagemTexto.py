@@ -1,5 +1,6 @@
 from PIL import Image
 from flask import Blueprint, jsonify, request, render_template
+import base64
 import controllers.imagemTexto as cImagemTexto
 imagemTexto_api = Blueprint('imagemTexto_api', __name__, template_folder='../../client/templates')
 
@@ -30,25 +31,24 @@ def criar():
     dados = request.get_json()
     print(dados)
     try:
-        criado = cImagemTexto.criar(dados['id'], dados['imagem'], dados['texto'])
+        base64string = dados['imagem'].encode("ascii")
+        imagemBinary = base64.decodebytes(base64string)
+        texto = image_to_text(imagemBinary)
+        criado = cImagemTexto.criar(dados['id'], dados['imagem'], texto)
         return jsonify(criado)
     except cImagemTexto.ImagemTextoExistente:
         return "Imagem já existe", 409
 
-@imagemTexto_api.route('/imagemTexto/<int:id>', methods=['DELETE'])
-def remover(id):
-    removido = cImagemTexto.remover(id)
-    if removido != None:
-        return jsonify(removido)
-    return '', 404
+def image_to_text(imagem):
+    import io
+    import os
+    from google.cloud import vision
+    client = vision.ImageAnnotatorClient()
 
-@imagemTexto_api.route('/imagemTexto/<int:id>', methods=['PUT'])
-def atualizar(id):
-    dados = request.get_json()
-    try:
-        atualizado = cImagemTexto.atualizar(id, dados['id'], dados['nome'])
-    except cImagemTexto.ImagemTextoExistente:
-        return "Imagem já existe", 409
-    if atualizado != None:
-        return jsonify(atualizado)
-    return '', 404
+    content = imagem
+    image = vision.types.Image(content=content)
+
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+    print('Resultado:', texts[0].description)
+    return texts[0].description

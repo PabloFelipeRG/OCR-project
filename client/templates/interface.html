@@ -85,15 +85,13 @@
         <section class="jumbotron text-center">
             <div class="container">
                 <h1 class="jumbotron-heading">Simplesmente Incrível!</h1>
-                <p class="lead text-muted">Converta sua foto para texto</p>
+                <p class="lead text-muted">Extraia o texto de sua foto</p>
                 <p>
                     <div class="form-group">
-                        <form action="{{url_for('imagemTexto_api.handle_data')}}" method="POST" enctype="multipart/form-data">
-                            <label class="btn btn-outline-secondary" for="selecao-arquivo">Selecionar um
-                                arquivo</label>
-                            <input id="selecao-arquivo" type="file" class="form-control"><br>
-                            <button type="submit" class="btn btn-dark">Converter</button>
-                        </form>
+                        <label class="btn btn-outline-secondary" for="selecao-arquivo">Selecionar um arquivo</label>
+                        <input id="selecao-arquivo" type="file" class="form-control"
+                            onchange="handleFieldChange(event, 'image')"><br>
+                        <button class="btn btn-dark" onclick="submit()">Extrair</button>
                     </div>
                 </p>
             </div>
@@ -153,5 +151,8 @@
             </p>
         </div>
     </footer>
+
+    <script src="../static/scripts/script.js"></script>
+</body>
 
 </html>
