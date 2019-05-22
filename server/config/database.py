@@ -9,8 +9,10 @@ CREATE TABLE IF NOT EXISTS ImagemTexto (
 )
 """
 
+
 def con():
     return sqlite3.connect("galeria.db")
+
 
 @transact(con)
 def criar_bd():
