@@ -10,8 +10,14 @@ def image_to_text(imagem):
 
     response = client.text_detection(image=image)
     texts = response.text_annotations
-    print('Resultado:', texts[0].description)
-    return texts[0].description
+    
+    if(len(texts) > 0):
+        print('Extração ok!')
+        return texts[0].description
+    else:
+        print('Nada foi extraído.')
+        return "Nada foi extraído"
+    
 
 
 def to_dict(obj):
