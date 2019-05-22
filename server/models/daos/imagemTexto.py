@@ -6,6 +6,7 @@ sql_criar = "INSERT INTO ImagemTexto (id, imagem, texto) VALUES (?,?,?)"
 sql_localizar = "SELECT id, imagem, texto FROM ImagemTexto WHERE id = ?"
 sql_listar = "SELECT id, imagem, texto FROM ImagemTexto"
 
+
 @transact(con)
 def listar():
     cursor.execute(sql_listar)
@@ -14,6 +15,7 @@ def listar():
         resultado.append(ImagemTexto(id, imagem, texto))
     return resultado
 
+
 @transact(con)
 def localizar(id):
     cursor.execute(sql_localizar)
@@ -21,6 +23,7 @@ def localizar(id):
     if linha == None:
         return None
     return ImagemTexto(linha[0], linha[1], linha[2])
+
 
 @transact(con)
 def criar(imagemTexto):
