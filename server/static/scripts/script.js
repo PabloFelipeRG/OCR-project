@@ -6,7 +6,7 @@ function handleFieldChange(value, field) {
     let file = value.target.files[0],
         reader = new FileReader();
     if (!file) {
-        alert("Nenhuma imagem foi anexada.");
+        Swal.fire("Nenhuma imagem foi anexada.");
         return;
     }
     reader.onload = (function (theFile) {
@@ -16,11 +16,12 @@ function handleFieldChange(value, field) {
                 //Converting Binary Data to base 64
                 let base64String = window.btoa(binaryData);
                 data[field] = base64String;
-                alert(`Imagem ${theFile.name} anexado com sucesso!`);
+                Swal.fire(`Imagem ${theFile.name} anexado com sucesso!`);
             };
         } else {
-            alert(`O arquivo deve ser uma imagem.`);
+            Swal.fire(`O arquivo deve ser uma imagem.`);
             data.image = null;
+            file = null;
             return;
         }
     })(file);
@@ -33,9 +34,10 @@ function handleFieldChange(value, field) {
 
 function submit() {
     if (data['image'] === null) {
-        alert('Você ainda não selecionou nenhuma imagem.');
+        Swal.fire('Você ainda não selecionou nenhuma imagem.');
         return;
     } else {
+        alertLoading();
         fetch(`http://localhost:5000/imagemTexto`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
@@ -85,4 +87,33 @@ function renderImagemTexto(imagemTexto) {
     div.setAttribute('style', "width: 220px; height: 200px; margin-bottom: 85px");
     div.innerHTML = template;
     row_html.appendChild(div)
+}
+
+function alertLoading() {
+    let timerInterval
+    Swal.fire({
+        title: 'Texto sendo extraído.',
+        html: 'Aguarde <strong></strong> milisegundos.',
+        timer: 10000,
+        animation: false,
+        customClass: {
+            popup: 'animated tada'
+        },
+        onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+                Swal.getContent().querySelector('strong')
+                    .textContent = Swal.getTimerLeft()
+            }, 100)
+        },
+        onClose: () => {
+            clearInterval(timerInterval)
+        }
+    }).then((result) => {
+        if (
+            // Read more about handling dismissals
+            result.dismiss === Swal.DismissReason.timer
+        ) {
+        }
+    })
 }
