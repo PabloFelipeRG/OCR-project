@@ -78,7 +78,7 @@ function renderImagemTexto(imagemTexto) {
                     <img src="data:image/png;base64, ${imagemTexto.imagem}" 
                     alt="${imagemTexto.texto}" style="width: 180px; height: 200px;">
                     <div class="card-body" style="border-top: 1px grey solid">
-                        <p class="card-text" data-toggle="tooltip" data-placement="bottom" title="${imagemTexto.texto}">${imagemTexto.texto}</p>
+                        <p class="card-text" data-toggle="tooltip" data-placement="bottom" title='${imagemTexto.texto}'>${imagemTexto.texto}</p>
                     </div>
                 </div>
             </div>`
