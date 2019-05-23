@@ -1,4 +1,4 @@
-var data = {
+﻿var data = {
     image: null
 }
 
@@ -50,6 +50,8 @@ function submit() {
             .then(response => {
                 data.image = null;
                 renderImagemTexto(response);
+                document.querySelector(".swal2-container").click();
+                window.scrollTo(0,document.body.scrollHeight);
             })
             .catch(console.error);
     }
@@ -93,8 +95,8 @@ function alertLoading() {
     let timerInterval
     Swal.fire({
         title: 'Texto sendo extraído.',
-        html: 'Aguarde <strong></strong> milisegundos.',
-        timer: 10000,
+        html: 'Aguarde <strong></strong> segundos.',
+        timer: 20000,
         animation: false,
         customClass: {
             popup: 'animated tada'
@@ -103,7 +105,7 @@ function alertLoading() {
             Swal.showLoading()
             timerInterval = setInterval(() => {
                 Swal.getContent().querySelector('strong')
-                    .textContent = Swal.getTimerLeft()
+                    .textContent = (Math.floor(Swal.getTimerLeft()/1000))
             }, 100)
         },
         onClose: () => {
